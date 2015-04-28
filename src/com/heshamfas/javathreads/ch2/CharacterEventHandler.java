@@ -16,7 +16,9 @@ public class CharacterEventHandler {
     }
 
     public void fireNewCharacter(CharacterSource source, int c) {
+        //firing the event
         CharacterEvent ce = new CharacterEvent(source, c);
+        //notifying all listeners
         CharacterListener[] cl = (CharacterListener[]) listeners.toArray(new CharacterListener[0]);// converting to array and specifying type
 
         for (int i = 0; i < cl.length; i++) {
