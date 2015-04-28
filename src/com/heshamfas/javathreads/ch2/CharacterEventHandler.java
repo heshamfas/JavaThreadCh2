@@ -5,7 +5,7 @@ import java.util.*;
  * Created by 458326 on 4/3/15.
  */
 public class CharacterEventHandler {
-    private Vector listeners = new Vector();
+    private Vector listeners = new Vector();// note here that the victor doesn't hava any type
 
     public void addCharacterListner(CharacterListener cl){
         listeners.add(cl);
@@ -17,7 +17,8 @@ public class CharacterEventHandler {
 
     public void fireNewCharacter(CharacterSource source, int c) {
         CharacterEvent ce = new CharacterEvent(source, c);
-        CharacterListener[] cl = (CharacterListener[]) listeners.toArray(new CharacterListener[0]);
+        CharacterListener[] cl = (CharacterListener[]) listeners.toArray(new CharacterListener[0]);// converting to array and specifying type
+
         for (int i = 0; i < cl.length; i++) {
             cl[i].newCharacter(ce);
         }
