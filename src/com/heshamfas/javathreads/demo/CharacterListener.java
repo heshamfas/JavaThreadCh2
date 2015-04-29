@@ -1,4 +1,4 @@
-package com.heshamfas.javathreads.ch2;
+package com.heshamfas.javathreads.demo;
 
 
 
