@@ -47,6 +47,7 @@ public class SwingTypeTester extends JFrame implements CharacterSource{
             }
         });
 
+
         feedbackCanvas.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
