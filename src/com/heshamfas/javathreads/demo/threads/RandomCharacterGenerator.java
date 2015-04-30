@@ -48,14 +48,18 @@ public int getPauseTime(){
         handler.fireNewCharacter(this, (int)chars[random.nextInt(chars.length)]);
     }
 
-    public void run(){
+    @Override
+    public void run() {
+        super.run();
         for(;;){
+            nextCharacter();
             try {
                 Thread.sleep(getPauseTime());
             }catch (InterruptedException ie){
                 return;
             }
-            }
         }
+    }
+
     }
 

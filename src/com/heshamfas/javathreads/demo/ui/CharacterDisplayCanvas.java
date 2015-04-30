@@ -16,8 +16,8 @@ public class CharacterDisplayCanvas extends JComponent implements CharacterListe
     protected int fontHeight;
 
     public CharacterDisplayCanvas() {
-        setFont(new Font("Monospaced", Font.BOLD, 18));
-        fm = Toolkit.getDefaultToolkit().getFontMetrics(getFont());
+        setFont(new Font("Arial", Font.BOLD, 18));
+        fm =getFontMetrics(getFont());
         fontHeight = fm.getHeight();
     }
 
@@ -30,11 +30,15 @@ public class CharacterDisplayCanvas extends JComponent implements CharacterListe
         cs.addCharacterListener(this);
     }
 
-    public Dimension preferredSize() {
+    @Override
+    public Dimension getPreferredSize() {
         return new Dimension((fm.getMaxAscent() + 10), (fm.getMaxAdvance() + 10));
     }
 
+
+    @Override
     protected synchronized void paintComponent(Graphics gc) {
+        super.paintComponent(gc);
         Dimension d = getSize();
         gc.clearRect(0, 0, d.width, d.height);
         if (tmpChar[0] == 0) {
