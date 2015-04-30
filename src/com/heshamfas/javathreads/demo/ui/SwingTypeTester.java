@@ -1,8 +1,8 @@
 package com.heshamfas.javathreads.demo.ui;
 
 import com.heshamfas.javathreads.demo.CharacterEventHandler;
-import com.heshamfas.javathreads.demo.CharacterListener;
-import com.heshamfas.javathreads.demo.CharacterSource;
+import com.heshamfas.javathreads.demo.ICharacterListener;
+import com.heshamfas.javathreads.demo.ICharacterSource;
 import com.heshamfas.javathreads.demo.threads.RandomCharacterGenerator;
 
 import javax.swing.*;
@@ -12,7 +12,7 @@ import java.awt.event.*;
 /**
  * Created by 458326 on 4/28/15.
  */
-public class SwingTypeTester extends JFrame implements CharacterSource{
+public class SwingTypeTester extends JFrame implements ICharacterSource {
 
     protected RandomCharacterGenerator producer;
     private CharacterDisplayCanvas displayCanvas;
@@ -91,15 +91,15 @@ public class SwingTypeTester extends JFrame implements CharacterSource{
     }
 
 
-    /*CharacterSource */
+    /*ICharacterSource */
     @Override
-    public void addCharacterListener(CharacterListener cl) {
+    public void addCharacterListener(ICharacterListener cl) {
         handler.addCharacterListner(cl);
 
     }
 
     @Override
-    public void removeCharacterListener(CharacterListener cl) {
+    public void removeCharacterListener(ICharacterListener cl) {
             handler.removeCharacterListener(cl);
     }
 

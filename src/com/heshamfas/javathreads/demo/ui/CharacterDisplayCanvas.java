@@ -1,8 +1,8 @@
 package com.heshamfas.javathreads.demo.ui;
 
 import com.heshamfas.javathreads.demo.CharacterEvent;
-import com.heshamfas.javathreads.demo.CharacterListener;
-import com.heshamfas.javathreads.demo.CharacterSource;
+import com.heshamfas.javathreads.demo.ICharacterListener;
+import com.heshamfas.javathreads.demo.ICharacterSource;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.awt.*;
 /**
  * Created by 458326 on 4/3/15.
  */
-public class CharacterDisplayCanvas extends JComponent implements CharacterListener {
+public class CharacterDisplayCanvas extends JComponent implements ICharacterListener {
     protected FontMetrics fm;
     protected char[] tmpChar = new char[1];
     protected int fontHeight;
@@ -21,12 +21,12 @@ public class CharacterDisplayCanvas extends JComponent implements CharacterListe
         fontHeight = fm.getHeight();
     }
 
-    public CharacterDisplayCanvas(CharacterSource cs) {
+    public CharacterDisplayCanvas(ICharacterSource cs) {
         this();
         setCharacterSource(cs);
     }
 
-    public void setCharacterSource(CharacterSource cs) {
+    public void setCharacterSource(ICharacterSource cs) {
         cs.addCharacterListener(this);
     }
 

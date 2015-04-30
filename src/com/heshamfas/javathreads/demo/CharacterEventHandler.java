@@ -8,19 +8,19 @@ import java.util.*;
 public class CharacterEventHandler {
     private Vector listeners = new Vector();// note here that the victor doesn't hava any type
 
-    public void addCharacterListner(CharacterListener cl){
+    public void addCharacterListner(ICharacterListener cl){
         listeners.add(cl);
 
     }
-    public void removeCharacterListener(CharacterListener cl){
+    public void removeCharacterListener(ICharacterListener cl){
         listeners.remove(cl);
     }
 
-    public void fireNewCharacter(CharacterSource source, int c) {
+    public void fireNewCharacter(ICharacterSource source, int c) {
         //firing the event
         CharacterEvent ce = new CharacterEvent(source, c);
         //notifying all listeners
-        CharacterListener[] cl = (CharacterListener[]) listeners.toArray(new CharacterListener[0]);// converting to array and specifying type
+        ICharacterListener[] cl = (ICharacterListener[]) listeners.toArray(new ICharacterListener[0]);// converting to array and specifying type
 
         for (int i = 0; i < cl.length; i++) {
             cl[i].newCharacter(ce);

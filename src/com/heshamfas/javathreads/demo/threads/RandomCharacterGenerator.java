@@ -1,15 +1,15 @@
 package com.heshamfas.javathreads.demo.threads;
 
 import com.heshamfas.javathreads.demo.CharacterEventHandler;
-import com.heshamfas.javathreads.demo.CharacterListener;
-import com.heshamfas.javathreads.demo.CharacterSource;
+import com.heshamfas.javathreads.demo.ICharacterListener;
+import com.heshamfas.javathreads.demo.ICharacterSource;
 
 import java.util.Random;
 
 /**
  * Created by 458326 on 4/28/15.
  */
-public class RandomCharacterGenerator extends Thread implements CharacterSource {
+public class RandomCharacterGenerator extends Thread implements ICharacterSource {
 
     private static char[] chars;
     private static String charArray = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -31,15 +31,15 @@ public int getPauseTime(){
 }
 
 
- /*CharacterSource interface*/
+ /*ICharacterSource interface*/
 
     @Override
-    public void addCharacterListener(CharacterListener cl) {
+    public void addCharacterListener(ICharacterListener cl) {
         handler.addCharacterListner(cl);
     }
 
     @Override
-    public void removeCharacterListener(CharacterListener cl) {
+    public void removeCharacterListener(ICharacterListener cl) {
         handler.removeCharacterListener(cl);
     }
 
