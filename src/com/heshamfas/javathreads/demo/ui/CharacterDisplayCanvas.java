@@ -3,7 +3,6 @@ package com.heshamfas.javathreads.demo.ui;
 import com.heshamfas.javathreads.demo.CharacterEvent;
 import com.heshamfas.javathreads.demo.ICharacterListener;
 import com.heshamfas.javathreads.demo.ICharacterSource;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,6 +14,7 @@ public class CharacterDisplayCanvas extends JComponent implements ICharacterList
     protected char[] tmpChar = new char[1];
     protected int fontHeight;
 
+           //component setting
     public CharacterDisplayCanvas() {
         setFont(new Font("Arial", Font.BOLD, 18));
         fm =getFontMetrics(getFont());
@@ -23,11 +23,7 @@ public class CharacterDisplayCanvas extends JComponent implements ICharacterList
 
     public CharacterDisplayCanvas(ICharacterSource cs) {
         this();
-        setCharacterSource(cs);
-    }
-
-    public void setCharacterSource(ICharacterSource cs) {
-        cs.addCharacterListener(this);
+        registerCharacterSource(cs);
     }
 
     @Override
@@ -48,13 +44,15 @@ public class CharacterDisplayCanvas extends JComponent implements ICharacterList
         gc.drawChars(tmpChar, 0, 1, (d.width - charWidth) / 2, fontHeight);
     }
 
+    // program specific methods//
+
+    public void registerCharacterSource(ICharacterSource cs) {
+        cs.addCharacterListener(this);
+    }
     //
     @Override
     public void newCharacter(CharacterEvent ce) {
         tmpChar[0] = (char) ce.character;
         repaint();
     }
-
-
-
 }

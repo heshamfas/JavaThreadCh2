@@ -27,23 +27,33 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
 
     private void initComponents(){
         handler = new CharacterEventHandler();
-        displayCanvas = new CharacterDisplayCanvas(this);
+        /*
+        This will set the character source as this SwingType Tester
+        Therefore the displayCanvas will be a listener to.
+        Random Character Generator.
+        This class SwingTypeTester has also FeadbackCanvas
+        which will Listen to keypress events which will call the
+        event handler to fire a new character event.
+        */
+        /*displayCanvas = new CharacterDisplayCanvas(this);*/
+        displayCanvas = new CharacterDisplayCanvas(); // her
         feedbackCanvas = new CharacterDisplayCanvas(this);
         startButton = new JButton();
         quitButton = new JButton();
         add(displayCanvas, BorderLayout.NORTH);
+        add(feedbackCanvas,BorderLayout.CENTER);
         JPanel p = new JPanel();
         startButton.setText("start");
         quitButton.setText("quit");
         p.add(startButton);
         p.add(quitButton);
-        add(p,BorderLayout.SOUTH);
+        add(p, BorderLayout.SOUTH);
 
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                    quit();
+                quit();
             }
         });
 
@@ -53,7 +63,7 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
                 char c = e.getKeyChar();
-                if(c != KeyEvent.CHAR_UNDEFINED){
+                if (c != KeyEvent.CHAR_UNDEFINED) {
                     newCharacter((int) c);
                 }
             }
@@ -63,7 +73,7 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
             @Override
             public void actionPerformed(ActionEvent e) {
                 producer = new RandomCharacterGenerator();
-                displayCanvas.setCharacterSource(producer);
+                displayCanvas.registerCharacterSource(producer);
                 producer.start();
                 startButton.setEnabled(false);
                 feedbackCanvas.setEnabled(true);
@@ -94,7 +104,7 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
     /*ICharacterSource */
     @Override
     public void addCharacterListener(ICharacterListener cl) {
-        handler.addCharacterListner(cl);
+        handler.addCharacterListener(cl);;
 
     }
 

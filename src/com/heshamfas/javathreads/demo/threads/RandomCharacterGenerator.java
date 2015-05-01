@@ -13,7 +13,6 @@ public class RandomCharacterGenerator extends Thread implements ICharacterSource
 
     private static char[] chars;
     private static String charArray = "abcdefghijklmnopqrstuvwxyz0123456789";
-
     static {
         chars = charArray.toCharArray();
     }
@@ -24,6 +23,7 @@ public class RandomCharacterGenerator extends Thread implements ICharacterSource
     public RandomCharacterGenerator(){
         random = new Random();
         handler = new CharacterEventHandler();
+        this.setName("RandomCharacterGenerator");
     }
 
 public int getPauseTime(){
@@ -35,7 +35,7 @@ public int getPauseTime(){
 
     @Override
     public void addCharacterListener(ICharacterListener cl) {
-        handler.addCharacterListner(cl);
+        handler.addCharacterListener(cl);
     }
 
     @Override
@@ -52,8 +52,9 @@ public int getPauseTime(){
     public void run() {
         super.run();
         for(;;){
-            nextCharacter();
             try {
+                //wait(3);
+                nextCharacter();
                 Thread.sleep(getPauseTime());
             }catch (InterruptedException ie){
                 return;

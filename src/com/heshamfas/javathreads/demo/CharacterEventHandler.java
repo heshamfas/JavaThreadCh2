@@ -5,16 +5,22 @@ import java.util.*;
  * Created by 458326 on 4/3/15.
  *  helper class that fires the events when appropriate:
  */
-public class CharacterEventHandler {
+public class CharacterEventHandler{
     private Vector listeners = new Vector();// note here that the victor doesn't hava any type
 
-    public void addCharacterListner(ICharacterListener cl){
-        listeners.add(cl);
 
+
+    public void addCharacterListener(ICharacterListener cl) {
+        listeners.add(cl);
     }
-    public void removeCharacterListener(ICharacterListener cl){
+
+
+    public void removeCharacterListener(ICharacterListener cl) {
         listeners.remove(cl);
     }
+
+
+
 
     public void fireNewCharacter(ICharacterSource source, int c) {
         //firing the event
