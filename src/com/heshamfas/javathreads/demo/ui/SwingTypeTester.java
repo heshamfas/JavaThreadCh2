@@ -17,8 +17,8 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
     protected RandomCharacterGenerator producer;
     private CharacterDisplayCanvas displayCanvas;
     private CharacterDisplayCanvas feedbackCanvas;
-    private JButton quitButton;
     private JButton startButton;
+    private JButton quitButton;
     private CharacterEventHandler handler;
 
     public SwingTypeTester(){
@@ -29,8 +29,8 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
         handler = new CharacterEventHandler();
         displayCanvas = new CharacterDisplayCanvas(this);
         feedbackCanvas = new CharacterDisplayCanvas(this);
-        quitButton = new JButton();
         startButton = new JButton();
+        quitButton = new JButton();
         add(displayCanvas, BorderLayout.NORTH);
         JPanel p = new JPanel();
         startButton.setText("start");
@@ -38,12 +38,12 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
         p.add(startButton);
         p.add(quitButton);
         add(p,BorderLayout.SOUTH);
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                     quit();
-
             }
         });
 
