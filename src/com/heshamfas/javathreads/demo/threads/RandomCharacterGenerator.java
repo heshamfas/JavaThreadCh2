@@ -12,6 +12,7 @@ import java.util.Random;
 public class RandomCharacterGenerator extends Thread implements ICharacterSource {
 
     private static char[] chars;
+    private volatile boolean done = false;
     private static String charArray = "abcdefghijklmnopqrstuvwxyz0123456789";
     static {
         chars = charArray.toCharArray();
@@ -48,12 +49,16 @@ public int getPauseTime(){
         handler.fireNewCharacter(this, (int)chars[random.nextInt(chars.length)]);
     }
 
+    public void setDone(){
+        done = true;
+    }
     @Override
     public void run() {
         super.run();
-        for(;;){
+
+        while (!done){
             try {
-                //wait(3);
+
                 nextCharacter();
                 Thread.sleep(getPauseTime());
             }catch (InterruptedException ie){
