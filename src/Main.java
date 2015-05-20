@@ -6,6 +6,5 @@ public class Main {
         System.out.println("Hello World!");
         SwingTypeTester swingTypeTester = new SwingTypeTester();
         swingTypeTester.setVisible(true);
-
     }
 }
