@@ -13,6 +13,7 @@ public class AnimatedCharacterDisplayCanvas  extends CharacterDisplayCanvas impl
     private volatile boolean done = false;
     private int curX= 0 ;
 
+    public AnimatedCharacterDisplayCanvas(){}
     public AnimatedCharacterDisplayCanvas(ICharacterSource cs){
         super(cs);
     }
@@ -26,6 +27,7 @@ public class AnimatedCharacterDisplayCanvas  extends CharacterDisplayCanvas impl
 
     @Override
     protected synchronized void paintComponent(Graphics gc){
+        System.out.println("Painting Component");
         Dimension d = getSize();
         gc.clearRect(0, 0, d.width, d.height);
         if(tmpChar[0]==0){
@@ -43,6 +45,7 @@ public class AnimatedCharacterDisplayCanvas  extends CharacterDisplayCanvas impl
             repaint();
             try{
                 Thread.sleep(100);
+                System.out.println("curX is :" + curX);
             }catch (InterruptedException ie){
                 return;
             }

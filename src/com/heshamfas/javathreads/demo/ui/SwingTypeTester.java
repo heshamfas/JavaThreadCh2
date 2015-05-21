@@ -15,7 +15,7 @@ import java.awt.event.*;
 public class SwingTypeTester extends JFrame implements ICharacterSource {
 
     protected RandomCharacterGenerator producer;
-    private CharacterDisplayCanvas displayCanvas;
+    private AnimatedCharacterDisplayCanvas displayCanvas;
     private CharacterDisplayCanvas feedbackCanvas;
     private JButton startButton;
     private JButton stopButton;
@@ -37,7 +37,7 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
         event handler to fire a new character event.
         */
         /*displayCanvas = new CharacterDisplayCanvas(this);*/
-        displayCanvas = new CharacterDisplayCanvas(); // her
+        displayCanvas = new AnimatedCharacterDisplayCanvas(); // her
         feedbackCanvas = new CharacterDisplayCanvas(this);
         startButton = new JButton();
         stopButton = new JButton()   ;
@@ -78,6 +78,8 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
             public void actionPerformed(ActionEvent e) {
                 producer = new RandomCharacterGenerator();
                 displayCanvas.registerCharacterSource(producer);
+                Thread dispalyCanvasThread = new Thread(displayCanvas);
+                dispalyCanvasThread.start();
                 producer.start();
                 startButton.setEnabled(false);
                 feedbackCanvas.setEnabled(true);
@@ -91,6 +93,7 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
                 startButton.setEnabled(true);
                 stopButton.setEnabled(false);
                 producer.setDone();
+                displayCanvas.setDone(true);
                 feedbackCanvas.setEnabled(false);
             }
         });
@@ -118,7 +121,7 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
     /*ICharacterSource */
     @Override
     public void addCharacterListener(ICharacterListener cl) {
-        handler.addCharacterListener(cl);;
+        handler.addCharacterListener(cl);
 
     }
 
