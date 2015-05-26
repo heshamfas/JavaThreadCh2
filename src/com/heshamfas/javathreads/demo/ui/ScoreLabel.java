@@ -5,6 +5,8 @@ import com.heshamfas.javathreads.demo.ICharacterListener;
 import com.heshamfas.javathreads.demo.ICharacterSource;
 
 import javax.swing.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by root on 5/26/15.
@@ -14,6 +16,7 @@ public class ScoreLabel extends JLabel implements ICharacterListener {
     private volatile int score =0;
     private int char2Type = -1;
     private ICharacterSource generator = null, typist = null;
+    private Lock scoreLock = new ReentrantLock();
 
     public ScoreLabel (ICharacterSource generator, ICharacterSource typist){
         this.generator= generator;
@@ -31,16 +34,25 @@ public class ScoreLabel extends JLabel implements ICharacterListener {
     }
 
     public synchronized void resetGenerator(ICharacterSource newGenerator){
-        if(generator!=null){
+        try{
+            scoreLock.lock();
+            if(generator!=null){
             generator.removeCharacterListener(this);
             generator = newGenerator;
             if(generator!= null){
                 generator.addCharacterListener(this);
             }
         }
+        }finally {
+            scoreLock.unlock();
+        }
     }
 
-    public synchronized void resetTypist(ICharacterSource newTypist){
+    public  void resetTypist(ICharacterSource newTypist){
+        try{
+
+            scoreLock.lock();
+
         if(typist!=null){
             typist.removeCharacterListener(this);
             typist = newTypist;
@@ -48,9 +60,12 @@ public class ScoreLabel extends JLabel implements ICharacterListener {
                 typist.addCharacterListener(this);
             }
         }
+        }finally {
+            scoreLock.unlock();
+        }
     }
 
-    public synchronized void setScore() {
+    public  void setScore() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -61,27 +76,35 @@ public class ScoreLabel extends JLabel implements ICharacterListener {
 
 
     @Override
-    public synchronized void newCharacter(CharacterEvent ce) {
+    public void newCharacter(CharacterEvent ce) {
         //previous character not typed correctly: 1- point penalty
+     /*   try{
+            scoreLock.lock();*/
         if(ce.source == generator){
-            if(char2Type!=-1){
-                score--;
-                setScore();
+            synchronized (this) {
+                if (char2Type != -1) {
+                    score--;
+                    setScore();
+                }
+                char2Type = ce.character;
             }
-            char2Type = ce.character;
         }
         //if character is extraneous: 1- point penalty
         // if character ddoes not match: 1- point penalty
         else {
-            if(char2Type != ce.character){
-                score--;
-            }else {
-                score++;
-                char2Type= -1;
+            synchronized (this) {
+                if (char2Type != ce.character) {
+                    score--;
+                } else {
+                    score++;
+                    char2Type = -1;
+                }
+                setScore();
             }
-            setScore();
         }
-
+ /*   }finally {
+            scoreLock.unlock();
+        }*/
     }
 
 }
