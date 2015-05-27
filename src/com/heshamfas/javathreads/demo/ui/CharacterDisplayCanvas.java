@@ -46,7 +46,7 @@ public class CharacterDisplayCanvas extends JComponent implements ICharacterList
 
     // program specific methods//
 
-    public void registerCharacterSource(ICharacterSource cs) {
+    protected void registerCharacterSource(ICharacterSource cs) {
         cs.addCharacterListener(this);
     }
     //
