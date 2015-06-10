@@ -25,12 +25,14 @@ public class CharacterEventHandler{
     public void fireNewCharacter(ICharacterSource source, int c) {
         //firing the event
         CharacterEvent ce = new CharacterEvent(source, c);
+        System.out.println("character even fired: " + c);
         //notifying all listeners
         ICharacterListener[] cl = (ICharacterListener[]) listeners.toArray(new ICharacterListener[0]);// converting to array and specifying type
 
         for (int i = 0; i < cl.length; i++) {
             cl[i].newCharacter(ce);
         }
+
     }
   /*
    http://stackoverflow.com/questions/174093/toarraynew-myclass0-or-toarraynew-myclassmylist-size

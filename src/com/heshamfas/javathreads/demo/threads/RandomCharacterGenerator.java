@@ -5,6 +5,10 @@ import com.heshamfas.javathreads.demo.ICharacterListener;
 import com.heshamfas.javathreads.demo.ICharacterSource;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by 458326 on 4/28/15.
@@ -12,7 +16,7 @@ import java.util.Random;
 public class RandomCharacterGenerator extends Thread implements ICharacterSource {
 
     private static char[] chars;
-    private volatile boolean done = false;
+    private volatile boolean done = true;
     private static String charArray = "abcdefghijklmnopqrstuvwxyz0123456789";
     static {
         chars = charArray.toCharArray();
@@ -20,6 +24,8 @@ public class RandomCharacterGenerator extends Thread implements ICharacterSource
 
     Random random;
     CharacterEventHandler handler;
+    private Lock lock = new ReentrantLock();
+    private Condition cv = lock.newCondition();
 
     public RandomCharacterGenerator(){
         random = new Random();
@@ -46,24 +52,45 @@ public int getPauseTime(){
 
     @Override
     public void nextCharacter() {
-        handler.fireNewCharacter(this, (int)chars[random.nextInt(chars.length)]);
+        char aChar= chars[random.nextInt(chars.length)];
+        handler.fireNewCharacter(this, (int)aChar);
+        System.out.println("character is: " + aChar);
+
     }
 
-    public void setDone(){
-        done = true;
+    public void setDone(boolean done){
+        try{
+            lock.lock();
+            this.done = done;
+            if(!done){
+                cv.signal();
+            }
+        }finally {
+            lock.unlock();
+        }
+
     }
     @Override
     public void run() {
         super.run();
+        try {
+        lock.lock();
+            System.out.println("inside character generator and done is : " + done);
+            while (!done) {
+                try {
+                    if(done){
+                        cv.await();
+                    }else {
+                        nextCharacter();
+                        cv.await(getPauseTime(), TimeUnit.MILLISECONDS);
+                    }
 
-        while (!done){
-            try {
-
-                nextCharacter();
-                Thread.sleep(getPauseTime());
-            }catch (InterruptedException ie){
-                return;
+                } catch (InterruptedException ie) {
+                    return;
+                }
             }
+        } finally {
+            lock.unlock();
         }
     }
 

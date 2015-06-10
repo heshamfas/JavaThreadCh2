@@ -21,6 +21,7 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
     private JButton stopButton;
     private JButton quitButton;
     private CharacterEventHandler handler;
+    private ScoreLabel scoreLabel;
 
     public SwingTypeTester(){
         initComponents();
@@ -37,21 +38,38 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
         event handler to fire a new character event.
         */
         /*displayCanvas = new CharacterDisplayCanvas(this);*/
+        producer = new RandomCharacterGenerator();
+        producer.setDone(true);//producer.setDone(true);
+        producer.start();
         displayCanvas = new AnimatedCharacterDisplayCanvas(); // her
         feedbackCanvas = new CharacterDisplayCanvas(this);
         startButton = new JButton();
-        stopButton = new JButton()   ;
+        stopButton = new JButton() ;
         quitButton = new JButton();
-        add(displayCanvas, BorderLayout.NORTH);
-        add(feedbackCanvas, BorderLayout.CENTER);
+        scoreLabel = new ScoreLabel(producer,this);
+       // add(displayCanvas, BorderLayout.NORTH);
+        //add(feedbackCanvas, BorderLayout.CENTER);
+        Container pane = getContentPane();
+        pane.add(displayCanvas,BorderLayout.NORTH);
+        pane.add(feedbackCanvas, BorderLayout.CENTER);
+
         JPanel p = new JPanel();
+        p.setLayout(new BorderLayout());
+        scoreLabel.setText(" No Score  ");
+        scoreLabel.setFont(new Font("MONOSPACED", Font.BOLD, 30));
+        p.add(scoreLabel, BorderLayout.CENTER);
+
+        JPanel p2 = new JPanel();
         startButton.setText("start");
         stopButton.setText("stop");
+        stopButton.setEnabled(false);
         quitButton.setText("quit");
-        p.add(startButton);
-        p.add(stopButton);
-        p.add(quitButton);
-        add(p, BorderLayout.SOUTH);
+        p2.add(startButton);
+        p2.add(stopButton);
+        p2.add(quitButton);
+        p.add(p2,BorderLayout.EAST);
+        pane.add(p, BorderLayout.SOUTH);
+
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -78,10 +96,14 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
             public void actionPerformed(ActionEvent e) {
                 producer = new RandomCharacterGenerator();
                 displayCanvas.registerCharacterSource(producer);
+                displayCanvas.setDone(false);
+                scoreLabel.resetGenerator(producer);
                 Thread dispalyCanvasThread = new Thread(displayCanvas);
                 dispalyCanvasThread.start();
+                producer.setDone(false);
                 producer.start();
                 startButton.setEnabled(false);
+                stopButton.setEnabled(true);
                 feedbackCanvas.setEnabled(true);
                 feedbackCanvas.requestFocus();
             }
@@ -92,7 +114,7 @@ public class SwingTypeTester extends JFrame implements ICharacterSource {
             public void actionPerformed(ActionEvent e) {
                 startButton.setEnabled(true);
                 stopButton.setEnabled(false);
-                producer.setDone();
+                producer.setDone(true);
                 displayCanvas.setDone(true);
                 feedbackCanvas.setEnabled(false);
             }
